@@ -1,0 +1,54 @@
+// To spin dynamically different messages in the variable MESSAGE, you can use an array of messages and modify the reply() function to pull a random message from the array each time. 
+
+
+var MESSAGE = ["Sample reply 1", "Sample reply 2", "Sample reply 3", "Sample reply 4"];
+var PERIOD = 5000;
+
+var cursor = document.querySelector('.comments-comments-list__comment-item')
+var count = 0;
+
+function next()
+{
+    if(count)
+    {
+        cursor = cursor.nextElementSibling;
+    }
+    cursor.style.backgroundColor = 'yellow';
+    cursor.scrollIntoView();
+    ++count;
+}
+
+function reply()
+{
+    cursor.querySelector('.reply').click();
+    window.setTimeout(function ()
+    {
+        var comment_boxes = cursor.querySelectorAll('.editor-content p');
+        comment_boxes[0].textContent = MESSAGE[Math.floor(Math.random() * MESSAGE.length)];
+        window.setTimeout(function ()
+        {
+            cursor.querySelector('.comments-comment-box__submit-button').click();
+            next();
+        }, PERIOD);
+    }, PERIOD)
+}
+
+function autoreply()
+{
+    window.setInterval(reply, PERIOD * 3);
+}
+
+next();
+
+
+function loadMore() {
+  var loadMoreButton = document.querySelector('.comments-comments-list__load-more-comments-button');
+  var commentItem = document.querySelector('.comments-comments-list__comment-item');
+
+  if (loadMoreButton && !commentItem.style.display) {
+    loadMoreButton.click();
+    setTimeout(loadMore, 1000);
+  }
+}
+
+loadMore();
